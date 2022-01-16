@@ -173,25 +173,47 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 		for (int j = MAX + 1; j > i; j--)
 			virtualKey[j] = virtualKey[j - 1];
 
+		// Debug(x);
 		virtualKey[i] = x;
-		for (int j = MAX + 2; j > i + 1; j--)
-			virtualPtr[j] = virtualPtr[j - 1];
+		// Debug(virtualKey[i]);
+		// for(int itr=0; itr<MAX+1; itr++)
+		// 	cout<< virtualKey[itr]<< ", ";
+		// cout<< endl;
+		
+		// for(int itr=0; itr<MAX+1; itr++)
+		// 	cout<< virtualKey[itr]<< ", ";
+		// cout<< endl;
 
-		virtualPtr[i + 1] = child;
 		newInternal->IS_LEAF = false;
 		cursor->size = (MAX + 1) / 2;
 		newInternal->size = MAX - (MAX + 1) / 2;
 
+		for(int i=0; i<cursor->size; i++)
+			cursor->key[i]= virtualKey[i];
 		for (i = 0, j = cursor->size + 1; i < newInternal->size; i++, j++)
 			newInternal->key[i] = virtualKey[j];
+		// for(int it=0; it<newInternal->size; it++)
+		// 	cout<< newInternal->key[it]<< ", ";
+		// cout<< endl;
+		// for(int it=0; it<cursor->size; it++)
+		// 	cout<< cursor->key[it]<< ", ";
+		// cout<< endl;
 
+		for (int j = MAX + 2; j > i; j--)
+			virtualPtr[j] = virtualPtr[j - 1];
+		// Debug(child->key[0]);
+		virtualPtr[i] = child;
+		// for(int it=0 ;it<MAX+2; it++)
+		// 	Debug(virtualPtr[it]->key[0]);
+		for(int i=0; i<cursor->size+1; i++)
+			cursor->ptr[i]= virtualPtr[i];
 		for (i = 0, j = cursor->size + 1; i < newInternal->size + 1; i++, j++)
 			newInternal->ptr[i] = virtualPtr[j];
 
-		if (cursor == root) 
+		if (cursor == root) //if overflown internal node was root u need new root
 		{
 			Node *newRoot = new Node;
-			newRoot->key[0] = cursor->key[cursor->size];
+			newRoot->key[0] = virtualKey[cursor->size];
 			newRoot->ptr[0] = cursor;
 			newRoot->ptr[1] = newInternal;
 			newRoot->IS_LEAF = false;

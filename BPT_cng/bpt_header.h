@@ -6,6 +6,7 @@
 #ifndef MAX
 #define MAX 3
 #endif
+#define Debug(x) cout<< #x<< ": "<< x<< "\n";
 
 using namespace std;
 
