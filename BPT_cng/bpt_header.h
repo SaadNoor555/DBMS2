@@ -4,7 +4,8 @@
 #include <sstream>
 
 #ifndef MAX
-#define MAX 3
+#define D 2
+#define MAX 5
 #endif
 #define Debug(x) cout<< #x<< ": "<< x<< "\n";
 
@@ -30,7 +31,7 @@ class BPTree
 
 public:
     BPTree();
-    void search(int);
+    bool search(int);
     void insert(int);
     void display(Node *);
     Node *getRoot();

@@ -5,25 +5,30 @@
 int main() 
 {
     BPTree node;
-    node.insert(5);
-    node.insert(15);
-    node.insert(25);
-    node.insert(35);
-    node.insert(45);
-    node.insert(55);
-    node.insert(40);
-    node.insert(30);
-    node.insert(20);
-	// node.display(node.getRoot());
-	// cout<<endl;
-	node.insert(10);
-	node.insert(50);
-    node.insert(70);
-    node.insert(75);
-    node.insert(80);
-    // node.insert(60);
-    // node.insert(65);
+    int tlim=200;
+    int errcnt= 0;
+    for(int i=0; i<tlim; i+=5)
+        node.insert(i);
+    for(int i=1; i<tlim; i+=5)
+        node.insert(i);
+    for(int i=2; i<tlim; i+=5)
+        node.insert(i);
+    for(int i=4; i<tlim; i+=5)
+        node.insert(i);
+    for(int i=3; i<tlim; i+=5)
+        node.insert(i);
+
     node.display(node.getRoot());
 
-    node.search(15);
+    for(int i=0; i<tlim; i++)
+    {
+        if(!node.search(i))
+        {
+            cout<< "error: "<< i<< endl;
+            errcnt++;
+            break;
+        }
+        
+    }
+    cout<< errcnt<<" errors out of "<< tlim<< endl;
 }

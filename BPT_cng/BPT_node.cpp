@@ -1,13 +1,14 @@
 #include "bpt_header.h"
 
 #ifndef MAX
+#define D 2
 #define MAX 3
 #endif
 
 Node::Node() 
 {
-	key = new int[MAX];
-	ptr = new Node *[MAX + 1];
+	key = new int[MAX + D];
+	ptr = new Node*[MAX + 1 + D];
 }
 
 Node::~Node()

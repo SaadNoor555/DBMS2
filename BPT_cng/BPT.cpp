@@ -1,6 +1,7 @@
 #include "bpt_header.h"
 
 #ifndef MAX
+#define D 2
 #define MAX 3
 #endif
 
@@ -9,9 +10,9 @@ BPTree::BPTree() {
 }
 
 // Search operation
-void BPTree::search(int x) {
+bool BPTree::search(int x) {
 	if (root == NULL)
-		cout << "Tree is empty\n";
+		return 0;
 		
 	else {
 		Node *cursor = root;
@@ -35,12 +36,14 @@ void BPTree::search(int x) {
 		{
 			if (cursor->key[i] == x) 
 			{
-				cout << "Found\n";
-				return;
+				// cout << "Found\n";
+				return 1;
 			}
 		}
-		cout << "Not found\n";
+		return 0;
+		// cout << "Not found\n";
 	}
+	return 0;
 }
 
 // Insert Operation
@@ -92,7 +95,7 @@ void BPTree::insert(int x)
 		{
 			Node *newLeaf = new Node;
 			// creating a container for new node
-			int virtualNode[MAX + 1];
+			int virtualNode[MAX + 1 + D];
 			for (int i = 0; i < MAX; i++) 
 				virtualNode[i] = cursor->key[i];
 
@@ -156,8 +159,8 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 	else 	//if the non-leaf node overflows
 	{
 		Node *newInternal = new Node;
-		int virtualKey[MAX + 1];
-		Node *virtualPtr[MAX + 2];
+		int virtualKey[MAX + 1 + D];
+		Node *virtualPtr[MAX + 2 + D];
 
 		for (int i = 0; i < MAX; i++)
 			virtualKey[i] = cursor->key[i];
@@ -165,15 +168,11 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 		for (int i = 0; i < MAX + 1; i++)
 			virtualPtr[i] = cursor->ptr[i];
 		
-		// for(int it=0; it<MAX+1; it++)
-		// 	cout<< virtualPtr[it]->key[0]<< ", ";
-		// cout<<endl;
-
 		int i = 0, j;
 
 		while (x > virtualKey[i] && i < MAX)
 			i++;
-			
+		int ic= i;	
 		for (int j = MAX + 1; j > i; j--)
 			virtualKey[j] = virtualKey[j - 1];
 
@@ -188,24 +187,11 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 		for (i = 0, j = cursor->size + 1; i < newInternal->size; i++, j++)
 			newInternal->key[i] = virtualKey[j];
 
-		// cout<< "Cur: ";
-		// for(int it=0; it<cursor->size; it++)
-		// 	cout<< cursor->key[it]<< ", ";
-		// cout<< endl;
-		// cout<< "new: ";
-		// for(int it=0; it<newInternal->size; it++)
-		// 	cout<< newInternal->key[it]<< ", ";
-		// cout<< endl;
-
-
-		for (int j = MAX + 2; j > i; j--)
+		for (int j = MAX + 2; j > ic+1; j--)
 			virtualPtr[j] = virtualPtr[j - 1];
 		// Debug(child->key[0]);
-		virtualPtr[i] = child;
-
-		// for(int it=0; it<MAX+2; it++)
-		// 	cout<< virtualPtr[it]->key[0]<< ", ";
-		// cout<<endl;
+		// Debug(i);
+		virtualPtr[ic+1] = child;
 		
 		for(int i=0; i<cursor->size+1; i++)
 			cursor->ptr[i]= virtualPtr[i];
