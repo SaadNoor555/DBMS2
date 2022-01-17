@@ -164,6 +164,10 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 
 		for (int i = 0; i < MAX + 1; i++)
 			virtualPtr[i] = cursor->ptr[i];
+		
+		// for(int it=0; it<MAX+1; it++)
+		// 	cout<< virtualPtr[it]->key[0]<< ", ";
+		// cout<<endl;
 
 		int i = 0, j;
 
@@ -173,38 +177,36 @@ void BPTree::insertInternal(int x, Node *cursor, Node *child)
 		for (int j = MAX + 1; j > i; j--)
 			virtualKey[j] = virtualKey[j - 1];
 
-		// Debug(x);
 		virtualKey[i] = x;
-		// Debug(virtualKey[i]);
-		// for(int itr=0; itr<MAX+1; itr++)
-		// 	cout<< virtualKey[itr]<< ", ";
-		// cout<< endl;
-		
-		// for(int itr=0; itr<MAX+1; itr++)
-		// 	cout<< virtualKey[itr]<< ", ";
-		// cout<< endl;
 
 		newInternal->IS_LEAF = false;
 		cursor->size = (MAX + 1) / 2;
 		newInternal->size = MAX - (MAX + 1) / 2;
 
-		for(int i=0; i<cursor->size; i++)
+		for(int i=0; i<cursor->size+1; i++)
 			cursor->key[i]= virtualKey[i];
 		for (i = 0, j = cursor->size + 1; i < newInternal->size; i++, j++)
 			newInternal->key[i] = virtualKey[j];
-		// for(int it=0; it<newInternal->size; it++)
-		// 	cout<< newInternal->key[it]<< ", ";
-		// cout<< endl;
+
+		// cout<< "Cur: ";
 		// for(int it=0; it<cursor->size; it++)
 		// 	cout<< cursor->key[it]<< ", ";
 		// cout<< endl;
+		// cout<< "new: ";
+		// for(int it=0; it<newInternal->size; it++)
+		// 	cout<< newInternal->key[it]<< ", ";
+		// cout<< endl;
+
 
 		for (int j = MAX + 2; j > i; j--)
 			virtualPtr[j] = virtualPtr[j - 1];
 		// Debug(child->key[0]);
 		virtualPtr[i] = child;
-		// for(int it=0 ;it<MAX+2; it++)
-		// 	Debug(virtualPtr[it]->key[0]);
+
+		// for(int it=0; it<MAX+2; it++)
+		// 	cout<< virtualPtr[it]->key[0]<< ", ";
+		// cout<<endl;
+		
 		for(int i=0; i<cursor->size+1; i++)
 			cursor->ptr[i]= virtualPtr[i];
 		for (i = 0, j = cursor->size + 1; i < newInternal->size + 1; i++, j++)

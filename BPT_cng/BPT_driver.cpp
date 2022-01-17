@@ -21,8 +21,8 @@ int main()
     node.insert(70);
     node.insert(75);
     node.insert(80);
-    node.insert(60);
-    node.insert(65);
+    // node.insert(60);
+    // node.insert(65);
     node.display(node.getRoot());
 
     node.search(15);
