@@ -9,10 +9,40 @@ BPTree::BPTree() {
   root = NULL;
 }
 
+void BPTree::query()
+{
+	string ban_word;
+    do
+    {
+        getline(cin, ban_word);
+        int itr;
+        Node* tmp= this->search(ban_word, itr);
+        if(tmp!=NULL)
+        {
+            while(tmp!=NULL && tmp->key[itr]==ban_word)
+            {
+                cout<< tmp->meaning[itr]<< ", ";
+                if(itr!=tmp->size-1) itr++;
+                else 
+                {
+                    tmp= tmp->ptr[tmp->size];
+                    itr=0;
+                }
+            }
+            cout<< endl;
+        }
+        else
+            cout<< ban_word<<" not found\n";
+
+    }while(ban_word!="end");
+}
+
+
+
 // Search operation
-string BPTree::search(string x) {
+Node* BPTree::search(string x, int& pos) {
 	if (root == NULL)
-		return "empty";
+		return NULL;
 		
 	else {
 		Node *cursor = root;
@@ -36,14 +66,15 @@ string BPTree::search(string x) {
 		{
 			if (cursor->key[i] == x) 
 			{
+				pos=  i;
 				// cout << "Found\n";
-				return cursor->meaning[i];
+				return cursor;
 			}
 		}
-		return "not found";
+		return NULL;
 		// cout << "Not found\n";
 	}
-	return "not found";
+	return NULL;
 }
 
 // Insert Operation

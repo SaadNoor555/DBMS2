@@ -5,7 +5,7 @@
 
 #ifndef MAX
 #define D 2
-#define MAX 7
+#define MAX 6
 #endif
 #define Debug(x) cout<< #x<< ": "<< x<< "\n";
 
@@ -33,8 +33,9 @@ class BPTree
 
 public:
     BPTree();
-    string search(string);
+    Node* search(string, int& pos);
     bool insert(string, string);
     void display(Node *);
     Node *getRoot();
+    void query();
 };
