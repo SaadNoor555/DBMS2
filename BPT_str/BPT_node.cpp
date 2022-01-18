@@ -8,6 +8,7 @@
 Node::Node() 
 {
 	key = new string[MAX + D];
+	meaning= new string[MAX + D];
 	ptr = new Node*[MAX + 1 + D];
 }
 

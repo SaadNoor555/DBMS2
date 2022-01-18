@@ -10,9 +10,9 @@ BPTree::BPTree() {
 }
 
 // Search operation
-bool BPTree::search(string x) {
+string BPTree::search(string x) {
 	if (root == NULL)
-		return 0;
+		return "empty";
 		
 	else {
 		Node *cursor = root;
@@ -37,24 +37,27 @@ bool BPTree::search(string x) {
 			if (cursor->key[i] == x) 
 			{
 				// cout << "Found\n";
-				return 1;
+				return cursor->meaning[i];
 			}
 		}
-		return 0;
+		return "not found";
 		// cout << "Not found\n";
 	}
-	return 0;
+	return "not found";
 }
 
 // Insert Operation
-void BPTree::insert(string x) 
+bool BPTree::insert(string x, string val) 
 {
     if (root == NULL) 
     {
         root = new Node;
         root->key[0] = x;
+		root->meaning[0]= val;
         root->IS_LEAF = true;
         root->size = 1;
+
+		return 1;
     } 
     else 
 	{
@@ -82,10 +85,14 @@ void BPTree::insert(string x)
 			int i = 0;
 			while (x > cursor->key[i] && i < cursor->size)
 				i++;
-			for (int j = cursor->size; j > i; j--) 	// moving every element after inserted element to right
+			for (int j = cursor->size; j > i; j--)	// moving every element after inserted element to right
+			{	
 				cursor->key[j] = cursor->key[j - 1];
+				cursor->meaning[j]= cursor->meaning[j-1];
+			}
 
 			cursor->key[i] = x;
+			cursor->meaning[i]= val;
 			cursor->size++;
 			cursor->ptr[cursor->size] = cursor->ptr[cursor->size - 1];		//moving the previous last pointer
 			cursor->ptr[cursor->size - 1] = NULL;
@@ -96,16 +103,24 @@ void BPTree::insert(string x)
 			Node *newLeaf = new Node;
 			// creating a container for new node
 			string virtualNode[MAX + 1 + D];
-			for (int i = 0; i < MAX; i++) 
+			string virtualMeaning[MAX + 1 + D];
+			for (int i = 0; i < MAX; i++)
+			{
 				virtualNode[i] = cursor->key[i];
+				virtualMeaning[i] = cursor->meaning[i];
+			}
 
 			int i = 0, j;
 			while (x > virtualNode[i] && i < MAX)
 				i++;
 			for (int j = MAX + 1; j > i; j--)
+			{
 				virtualNode[j] = virtualNode[j - 1];
+				virtualMeaning[j] = virtualMeaning[j-1];
+			}
 
 			virtualNode[i] = x;
+			virtualMeaning[i] = val;
 			newLeaf->IS_LEAF = true;
 
 			//after splitting size
@@ -117,15 +132,22 @@ void BPTree::insert(string x)
 			cursor->ptr[MAX] = NULL;
 
 			for (i = 0; i < cursor->size; i++)
+			{
 				cursor->key[i] = virtualNode[i];
+				cursor->meaning[i] = virtualMeaning[i];
+			}
 
 			for (i = 0, j = cursor->size; i < newLeaf->size; i++, j++)
+			{
 				newLeaf->key[i] = virtualNode[j];
+				newLeaf->meaning[i] = virtualMeaning[j];
+			}
 
 			if (cursor == root) 	//if cursor was root, create a new root
 			{
 				Node *newRoot = new Node;
 				newRoot->key[0] = newLeaf->key[0];
+				newLeaf->meaning[0] = newLeaf->meaning[0];
 				newRoot->ptr[0] = cursor;
 				newRoot->ptr[1] = newLeaf;
 				newRoot->IS_LEAF = false;
@@ -133,13 +155,15 @@ void BPTree::insert(string x)
 				root = newRoot;
 			} 
 			else 
-				insertInternal(newLeaf->key[0], parent, newLeaf);
+				insertInternal(newLeaf->key[0], newLeaf->meaning[0], parent, newLeaf);
 		}
+		return 1;
     }
+	return 0;
 }
 
 // Insert Operation
-void BPTree::insertInternal(string x, Node *cursor, Node *child) 
+void BPTree::insertInternal(string x, string val, Node *cursor, Node *child) 
 {
 	if (cursor->size < MAX) //if the non-leaf node doesn't overflow
 	{
@@ -153,6 +177,7 @@ void BPTree::insertInternal(string x, Node *cursor, Node *child)
 			cursor->ptr[j] = cursor->ptr[j - 1];
 
 		cursor->key[i] = x;
+		cursor->meaning[i]= val;
 		cursor->size++;
 		cursor->ptr[i + 1] = child;
 	} 
@@ -160,10 +185,14 @@ void BPTree::insertInternal(string x, Node *cursor, Node *child)
 	{
 		Node *newInternal = new Node;
 		string virtualKey[MAX + 1 + D];
+		string virtualMeaning[MAX+ 1 + D];
 		Node *virtualPtr[MAX + 2 + D];
 
 		for (int i = 0; i < MAX; i++)
+		{
 			virtualKey[i] = cursor->key[i];
+			virtualMeaning[i] = cursor->meaning[i];
+		}
 
 		for (int i = 0; i < MAX + 1; i++)
 			virtualPtr[i] = cursor->ptr[i];
@@ -174,18 +203,28 @@ void BPTree::insertInternal(string x, Node *cursor, Node *child)
 			i++;
 		int ic= i;	
 		for (int j = MAX + 1; j > i; j--)
+		{
 			virtualKey[j] = virtualKey[j - 1];
+			virtualMeaning[j] = virtualMeaning[j-1];
+		}
 
 		virtualKey[i] = x;
+		virtualMeaning[i] = val;
 
 		newInternal->IS_LEAF = false;
 		cursor->size = (MAX + 1) / 2;
 		newInternal->size = MAX - (MAX + 1) / 2;
 
 		for(int i=0; i<cursor->size+1; i++)
+		{
 			cursor->key[i]= virtualKey[i];
+			cursor->meaning[i] = virtualMeaning[i];
+		}
 		for (i = 0, j = cursor->size + 1; i < newInternal->size; i++, j++)
+		{
 			newInternal->key[i] = virtualKey[j];
+			newInternal->meaning[i] = virtualMeaning[j];
+		}
 
 		for (int j = MAX + 2; j > ic+1; j--)
 			virtualPtr[j] = virtualPtr[j - 1];
@@ -202,6 +241,7 @@ void BPTree::insertInternal(string x, Node *cursor, Node *child)
 		{
 			Node *newRoot = new Node;
 			newRoot->key[0] = virtualKey[cursor->size];
+			newRoot->meaning[0] = virtualMeaning[cursor->size];
 			newRoot->ptr[0] = cursor;
 			newRoot->ptr[1] = newInternal;
 			newRoot->IS_LEAF = false;
@@ -209,7 +249,7 @@ void BPTree::insertInternal(string x, Node *cursor, Node *child)
 			root = newRoot;
 		} 
 		else
-			insertInternal(cursor->key[cursor->size], findParent(root, cursor), newInternal);
+			insertInternal(cursor->key[cursor->size], cursor->meaning[cursor->size], findParent(root, cursor), newInternal);
 
 	}
 }

@@ -15,6 +15,7 @@ class Node {
     bool IS_LEAF;
     // wstring* key;
     string* key;
+    string* meaning;
     int size;
     Node **ptr;
     friend class BPTree;
@@ -27,13 +28,13 @@ public:
 class BPTree 
 {
     Node *root;
-    void insertInternal(string, Node *, Node *);
+    void insertInternal(string, string, Node *, Node *);
     Node *findParent(Node *, Node *);
 
 public:
     BPTree();
-    bool search(string);
-    void insert(string);
+    string search(string);
+    bool insert(string, string);
     void display(Node *);
     Node *getRoot();
 };
