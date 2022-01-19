@@ -3,5 +3,9 @@
         "activityBar.background": "#2E2E28",
         "titleBar.activeBackground": "#404038",
         "titleBar.activeForeground": "#FBFBFA"
+    },
+    "files.associations": {
+        "*.cpp": "cpp",
+        "iosfwd": "cpp"
     }
 }

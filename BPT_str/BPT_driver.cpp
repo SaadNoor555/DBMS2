@@ -2,7 +2,6 @@
 
 #include "bpt_header.h"
 #include <fstream>
-#include <windows.h>
 
 int main() 
 {
@@ -17,7 +16,7 @@ int main()
         int pos= line.find("|", 1);
         eng= line.substr(1, pos-1);
         ban= line.substr(pos+1);
-        flag &= node.insert(eng, ban);
+        flag &= node.insert(ban, eng);
     }
     if(flag)
         cout<< "B+ Tree Created Successfully\nInsert strings to find: \n";
@@ -25,14 +24,9 @@ int main()
         cout<< "B+ Tree Creation Failed\n";
     // cout
     // node.display(node.getRoot());
-    string s;
-    do
-    {
-        cin>> s;
-        cout<< node.search(s)<< endl;
-    }while(s!="end");
+    node.query();
 
     in.close();
     
 
-}
+} 
