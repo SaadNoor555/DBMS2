@@ -1,3 +1,4 @@
+# TESTER CODE
 from fileinput import filename
 import numpy as NP
 from PIL import Image
