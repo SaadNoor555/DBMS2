@@ -13,10 +13,10 @@ root.withdraw()
 
 start_time = time.time()
 
-tc= 0.10
+tc= 0.3
 proSkin=NP.zeros([256,256,256])
 
-f= open('data.txt', 'r')
+f= open('data1.txt', 'r')
 for r in range(0,256):
     for g in range(0,256):
         for b in range(0,256):
@@ -26,7 +26,7 @@ for r in range(0,256):
 
 
 
-im1= Image.open('t2.jpg')
+im1= Image.open('tasvodai.jpg')
 wid,hig= im1.size
 # print(wid)
 # print(hig)
@@ -45,7 +45,7 @@ for x in range (0, wid):
             pixel_map[x,y]= pix[0], pix[1], pix[2]
 # print(cnt)
 f.close()
-o_img.save('pt2.jpg')
+o_img.save('tt1.jpg')
 o_img.show()
 im1.show()
 print("--- %s seconds ---" % (time.time() - start_time))
