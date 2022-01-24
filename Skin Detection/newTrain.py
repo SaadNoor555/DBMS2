@@ -28,7 +28,8 @@ for fname in files1:
     ims= Image.open(newf)
 
     for (pixel, pixel1) in zip(im.getdata(),ims.getdata()):
-        if pixel[0]==pixel1[0] and pixel[1]==pixel1[1] and pixel[2]==pixel1[2] and (pixel[0]<250 or pixel[1]<250 or pixel[2]<250):
+        # if pixel[0]==pixel1[0] and pixel[1]==pixel1[1] and pixel[2]==pixel1[2] and (pixel[0]<255 or pixel[1]<255 or pixel[2]<255):
+        if  (pixel[0]<255 or pixel[1]<255 or pixel[2]<255):
             cnt[pixel1[0]][pixel1[1]][pixel1[2]]+=1
             # skinCount+=1
         else:
@@ -39,9 +40,10 @@ f= open('data1.txt', 'w')
 for r in range(0,256):
     for g in range(0,256):
         for b in range(0,256):
-            nskin[r][g][b]+=1
-            cnt[r][g][b]+=1
-            prob=cnt[r][g][b]/nskin[r][g][b]
+            if(nskin[r][g][b]==0):
+                prob=min(cnt[r][g][b],1)
+            else:
+                prob=cnt[r][g][b]/nskin[r][g][b]
 
                 # print(proSkin[r][g][b])
             f.write(str(prob)+"\n")
