@@ -27,7 +27,7 @@ for r in range(0,256):
 
 
 
-im1= Image.open('tasvodai.jpg')
+im1= Image.open('tasadnan.jpg')
 wid,hig= im1.size
 # print(wid)
 # print(hig)
@@ -46,7 +46,7 @@ for x in range (0, wid):
             pixel_map[x,y]= pix[0], pix[1], pix[2]
 # print(cnt)
 f.close()
-o_img.save('ttSakib.jpg')
+o_img.save('ta1.jpg')
 o_img.show()
 im1.show()
 print("--- %s seconds ---" % (time.time() - start_time))
