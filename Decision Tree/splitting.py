@@ -1,5 +1,7 @@
 import math
 
+class_index = 0
+
 def split(dimension, value, parent):
     left, right = list(), list()
 
@@ -21,7 +23,7 @@ def get_tot_rows(group):
 def get_class_rows(group, n_class):
     class_rows = [0]*n_class
     for row in group:
-        class_rows[row[0]-1] += 1
+        class_rows[row[class_index]-1] += 1
     
     return class_rows
 
@@ -33,7 +35,7 @@ def entropy(group, n_class):
     for x in class_rows:
         entropy += (x/tot_rows) * math.log(x/tot_rows, 2)
 
-    return entropy
+    return -entropy
 
 def info_gain(parent, left, right, n_class):
     parent_entropy = entropy(parent, n_class)
@@ -46,3 +48,17 @@ def info_gain(parent, left, right, n_class):
 
     info_gain = parent_entropy - ((left_rows/parent_rows)*left_entropy + (right_rows/parent_rows)*right_entropy)
     return info_gain
+
+def select_split(parent, n_class):
+    best_val= 100000
+    best_dim
+    for row in parent:
+        for col in row:
+            if col!=0:
+                left, right=split(col, row[col], parent)
+                info_gain= info_gain(parent, left, right, n_class)
+                if best_val<=info_gain:
+                    best_val= info_gain
+                    best_dim= col
+
+    return best_dim, best_val
