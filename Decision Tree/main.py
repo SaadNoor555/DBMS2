@@ -67,3 +67,4 @@ n_class = int(easygui.enterbox(text, title))
 root = DT.build_decision_tree(trainSet, n_class)
 testDecisionTree(root, testset)
 file.close()
+
