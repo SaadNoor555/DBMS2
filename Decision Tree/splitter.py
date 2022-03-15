@@ -2,11 +2,11 @@ import math
 
 class_index = 0
 
-def split(dimension, value, parent):
+def split_rows(dimension, value, parent):
     left, right = list(), list()
 
     for row in parent:
-        if row[dimension] < value:
+        if float(row[dimension]) < float(value):
             left.append(row)
         else:
             right.append(row)
@@ -23,18 +23,26 @@ def get_tot_rows(group):
 def get_class_rows(group, n_class):
     class_rows = [0]*n_class
     for row in group:
-        class_rows[row[class_index]-1] += 1
+        class_rows[int(row[class_index])-1] += 1
     
     return class_rows
 
+def get_n_column(row):
+    n_col=0
+    for col in row:
+        n_col+=1
+    return n_col
+
 def entropy(group, n_class):
     entropy = 0
-    tot_rows = get_tot_rows(group)
+    tot_rows = int(get_tot_rows(group))
     class_rows = get_class_rows(group, n_class)
-
+    if tot_rows<=0:
+        return 0
     for x in class_rows:
-        entropy += (x/tot_rows) * math.log(x/tot_rows, 2)
-
+        prob = float(x/tot_rows)
+        if(prob>0):
+            entropy += (prob * math.log(prob))
     return -entropy
 
 def info_gain(parent, left, right, n_class):
@@ -50,15 +58,18 @@ def info_gain(parent, left, right, n_class):
     return info_gain
 
 def select_split(parent, n_class):
-    best_val= 100000
-    best_dim
+    best_gain = 0.0
+    best_val= 0.0
+    best_dim= 0
+    gain= 0
+    n_col = get_n_column(parent[0])
     for row in parent:
-        for col in row:
-            if col!=0:
-                left, right=split(col, row[col], parent)
-                info_gain= info_gain(parent, left, right, n_class)
-                if best_val<=info_gain:
-                    best_val= info_gain
-                    best_dim= col
+        for col in range(1, n_col):
+            left, right=split_rows(col, row[col], parent)
+            gain= info_gain(parent, left, right, n_class)
+            if float(best_gain)<gain:
+                best_val= row[col]
+                best_dim= col
+                best_gain=gain
 
     return best_dim, best_val
