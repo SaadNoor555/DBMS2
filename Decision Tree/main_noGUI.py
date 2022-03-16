@@ -19,7 +19,6 @@ def testDecisionTree(root, testset):
     r_ans, tot_test= 0, 0
     for row in testset:
         cls= findAppropriateNode(root, row)
-        writer.writerow([row[0], cls, cls == row[0]])
         if cls == row[0]:
             r_ans+=1
         tot_test+=1
@@ -45,31 +44,15 @@ def printPreOrder(node, depth):
     print(node.dim, ', ', node.val)
 
 '''driver starts here'''
-file = open(CON.getFile())
+file = open('wine.csv')
 csvreader = csv.reader(file)
 dataset = []
 for row in csvreader:
     dataset.append(row)
-
-'''FOR GUI AND FILES'''
-title = "Create Decision Tree"
-text = "Enter number of class:"
-n_class = int(easygui.enterbox(text, title))
-title = "Enter File Name"
-text = "Result File Name:"
-d_text = "*.csv"
-saveFileName = easygui.enterbox(text, title, d_text)
-if saveFileName.endswith('.csv')==False:
-    saveFileName += '.csv'
-outputFile = open(saveFileName, 'w', newline='')
-writer = csv.writer(outputFile)
-
-
+n_class=3
 random.shuffle(dataset)
 g_tot, g_r_tol= 0,0
 for i in range(10):
-    writer.writerow(['Run:', i+1])
-    writer.writerow(['expected', 'found', 'correctness'])
     sz= len(dataset)
     trainSet, testset = divDataset(i*(sz/10), sz, dataset)
     root = DT.build_decision_tree(trainSet, n_class)
@@ -78,16 +61,8 @@ for i in range(10):
     g_r_tol+=r_ans
     ac= (r_ans/tot_test)*100
     print('Test '+str(i+1)+' Accuracy: '+str(ac))
-    writer.writerow(['Accuracy='+str(ac), 'Test size='+str(tot_test)])
-
 
 g_acc=(g_r_tol/g_tot)*100
-msg='\nAccuracy: '+str(g_acc)+'%\n'+'Total testset size: '+str(g_tot)+'\nCheck '+saveFileName+' for details'
+msg='\nAccuracy: '+str(g_acc)+'%\n'+'Total testset size: '+str(g_tot)
 print(msg)
-
-
-writer.writerow(['Decision Tree Grand Accuracy='+str(g_acc)+'%', 'Total Tests:'+str(g_tot)])
-writer.writerow([])
-easygui.msgbox(msg, 'Testing Complete')
-outputFile.close()
 file.close()
