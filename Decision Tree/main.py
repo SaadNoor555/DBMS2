@@ -39,19 +39,21 @@ def testDecisionTree(root, testset):
     outputFile.close()
 
 def seperateDataset(dataset):
-    n_dat = len(dataset)
-    testList = [random.randrange(0, n_dat, 1) for i in range(int(n_dat/10))]
-    testList.sort()
-    idx, it = 0, 0
     testset,trainSet=[],[]
     for row in dataset:
-        if idx<int(n_dat/10) and testList[idx]==it:
+        if random.random()>0.8:
             testset.append(row)
-            idx+=1
         else:
             trainSet.append(row)
-        it+=1
     return trainSet, testset
+
+def printPreOrder(node, depth):
+    if node.leftChild!=None:
+        printPreOrder(node.leftChild, depth+1)
+    if node.rightChild!=None:
+        printPreOrder(node.rightChild, depth+1)
+    for i in range(depth): print(end=' ')
+    print(node.dim, ', ', node.val)
 
 '''driver starts here'''
 file = open(CON.getFile())
@@ -60,11 +62,12 @@ dataset = []
 for row in csvreader:
     dataset.append(row)
 
-trainSet, testset= seperateDataset(dataset)
 title = "Create Decision Tree"
 text = "Enter number of class:"
 n_class = int(easygui.enterbox(text, title))
+trainSet, testset= seperateDataset(dataset)
 root = DT.build_decision_tree(trainSet, n_class)
+printPreOrder(root,0)
 testDecisionTree(root, testset)
 file.close()
 

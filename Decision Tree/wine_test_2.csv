@@ -1,8 +1,0 @@
-expected,found,correctness
-1,1,True
-1,1,True
-1,2,False
-1,1,True
-1,2,False
-1,1,True
-Accuracy=66.66666666666666
