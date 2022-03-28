@@ -1,4 +1,3 @@
-from cmath import sqrt
 import numpy as NP
 from PIL import Image
 from pathlib import Path
@@ -11,33 +10,35 @@ def calcDistance(pix1, pix2):
 def countImgDistance(files, type):
     for file in files:
         img = Image.open(file)
-        img.resize((500, 310))
+        img.resize((x, y))
         dis = 0
         for (pix1, pix2) in zip(testImg.getdata(), img.getdata()):
             dis += calcDistance(pix1, pix2)
         distance.append([dis, type])
 
 K = 3
-
 start_time = time()
-
-files1, files2 = Path('summer').glob('*'), Path('winter').glob('*')
-
+x, y= 500, 500
+folders = ['winter', 'summer']
 testImg = Image.open('w-2.jpg')
-testImg.resize((500, 310))
+testImg.resize((x, y))
 
 distance = list()
-
-countImgDistance(files1, 'summer')
-countImgDistance(files2, 'winter')
+for folder in folders:
+    countImgDistance(Path(folder).glob('*'), folder)
 
 distance.sort(key = lambda x: x[0])
 
-sc, wc = 0, 0
-for i in range(K):
-    if distance[i][1]=='summer': sc+=1
-    else: wc+=1
+mp = {}
+for type in folders:
+    mp[type] = 0
 
-if sc>wc: print('summer')
-else: print('winter')
+for i in range(K): mp[distance[i][1]]+=1
+
+sortedDict = {k:v for k, v in sorted(mp.items(), reverse=True, key=lambda x: x[1])}
+print(sortedDict)
+for key in sortedDict:
+    print(key)
+    break
+
 print("--- %s seconds ---" % (time() - start_time))
