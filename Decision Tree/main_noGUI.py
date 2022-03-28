@@ -35,7 +35,7 @@ def divDataset(idx, sz, dataset):
         i+=1
     return trainSet, testset
 
-def printPreOrder(node, depth):
+def printPreOrder(node, depth=0):
     if node.leftChild!=None:
         printPreOrder(node.leftChild, depth+1)
     if node.rightChild!=None:
@@ -61,7 +61,7 @@ for i in range(10):
     g_r_tol+=r_ans
     ac= (r_ans/tot_test)*100
     print('Test '+str(i+1)+' Accuracy: '+str(ac))
-
+printPreOrder(root)
 g_acc=(g_r_tol/g_tot)*100
 msg='\nAccuracy: '+str(g_acc)+'%\n'+'Total testset size: '+str(g_tot)
 print(msg)
